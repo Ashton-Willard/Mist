@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Mist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Your Shopping Cart</h1>
+        <nav class="nav-buttons">
+            <button onclick="window.location.href='{{ url_for('store') }}'">Continue Shopping</button>
+            <button onclick="window.location.href='{{ url_for('library') }}'">Library</button>
+            {% if current_user.is_authenticated %}
+                <div class="user-dropdown">
+                    <span class="username">{{ current_user.username }}</span>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('index') }}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <button onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                <button onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <h2>Your Cart</h2>
+        {% if cart %}
+            <section class="cart-items">
+                <div class="game-grids">
+                    {% for item in cart %}
+                        <div class="game-card">
+                            <div class="image-wrapper">
+                                {% if item.image_url %}
+                                    <img class="game-images" src="{{ item.image_url }}" alt="{{ item.title }}">
+                                {% elif item.image_filename %}
+                                    <img class="game-images" src="{{ url_for('static', filename='images/' + item.image_filename) }}" alt="{{ item.title }}">
+                                {% else %}
+                                    <img class="game-images" src="{{ url_for('static', filename='images/default.jpg') }}" alt="{{ item.title }}">
+                                {% endif %}
+                            </div>
+
+                            <div class="game-details">
+                                <h3>{{ item.title }}</h3>
+                                <p class="price">${{ "%.2f"|format(item.price) }}</p>
+                            </div>
+
+                            <form method="POST" action="{{ url_for('remove_from_cart', game_id=item.id) }}">
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <div class="checkout-section">
+                <p class="total-price">Total: ${{ "%.2f"|format(total_price) }}</p>
+                <form method="GET" action="{{ url_for('checkout') }}">
+                    <button type="submit" class="checkout-btn">Proceed to Checkout</button>
+                </form>
+            </div>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>© 2025 Mist Gaming Store</p>
+    </footer>
+
+    <script>
+        document.getElementById('searchBox')?.addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            document.querySelectorAll('.game-card').forEach(card => {
+                let title = card.querySelector('h3').textContent.toLowerCase();
+                card.style.display = title.includes(searchQuery) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mist - Game Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Mist Game Store</h1>
+        <nav class="nav-buttons">
+            {% if current_user.is_authenticated and current_user.role in ['Admin', 'Vendor'] %}
+
+                    <button class="nav" onclick="window.location.href='{{ url_for('admin_reviews') }}'">Review Requests</button>
+                    <button class="nav" onclick="window.location.href='{{ url_for('add_game') }}'">Add Game</button>
+                    <button class="nav" onclick="window.location.href='{{ url_for('dashboard') }}'">Manage Games</button>
+            {% endif %}
+
+            <form action="{{ url_for('search_genre') }}" method="get" class="nav-buttons">
+                <input type="text" name="genre" placeholder="Search by genre...">
+                <button class="nav" type="submit">Search</button>
+            </form>
+             <button class="nav" onclick="window.location.href='{{ url_for('genre_filter') }}'">Filter Genres</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('store') }}'">Store</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('library') }}'">Library</button>
+            <input class="nav"  type="text" placeholder="Search games..." id="searchBox">
+            <button class="nav" onclick="window.location.href='{{ url_for('wishlist') }}'">Wishlist</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('cart') }}'">
+                🛒 Cart <span id="cart-count" style="background:blue; border-radius:50%; padding:2px 8px; color:white;">{{ cart_item_count }}</span>
+
+            </button>
+
+            {% if current_user.is_authenticated %}
+                <div class="user-dropdown">
+                    <span class="username">{{ current_user.username }}</span>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('index') }}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <button onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                <button onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
+            {% endif %}
+        </nav>
+    </header>
+
+<section class="placeholder-section">
+    <h2>Featured Games</h2>
+    <div class="game-grid featured-games">
+        {% for game in all_games[:4] %}
+            <div class="game-card">
+                <a href="{{ url_for('game_detail', game_id=game.id) }}">
+                    {% if game.image_url %}
+                        <img class="picture_size" src="{{ game.image_url }}" alt="{{ game.title }}">
+                    {% elif game.image_filename %}
+                        <img class="picture_size" src="{{ url_for('static', filename='images/' + game.image_filename) }}" alt="{{ game.title }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default.jpg') }}" alt="{{ game.title }}">
+                    {% endif %}
+                    <h3>{{ game.title }}</h3>
+                    <p>${{ "%.2f"|format(game.price) }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Section Divider -->
+    <div class="section-divider"></div>
+
+    <h2>All Games</h2>
+    <div class="game-grid">
+        {% for game in all_games[4:] %}
+            <div class="game-card">
+                <a href="{{ url_for('game_detail', game_id=game.id) }}">
+                    {% if game.image_url %}
+                        <img class="picture_size" src="{{ game.image_url }}" alt="{{ game.title }}">
+                    {% elif game.image_filename %}
+                        <img class="picture_size" src="{{ url_for('static', filename='images/' + game.image_filename) }}" alt="{{ game.title }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default.jpg') }}" alt="{{ game.title }}">
+                    {% endif %}
+                    <h3>{{ game.title }}</h3>
+                    <p>${{ "%.2f"|format(game.price) }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+    <footer>
+        <p>© 2025 Mist Game Store</p>
+    </footer>
+
+    <script>
+        document.getElementById("reviewForm").action = "/library/review/" + gameId;
+        document.getElementById('searchBox').addEventListener('input', function () {
+            let searchQuery = this.value.toLowerCase();
+            document.querySelectorAll('.game-card').forEach(card => {
+                let title = card.querySelector('h3').textContent.toLowerCase();
+                card.style.display = title.includes(searchQuery) ? 'block' : 'none';
+                // Update the cart count dynamically
+                        const cartCountElement = document.getElementById('cart-count');
+                        if (cartCountElement) {
+                            cartCountElement.innerText = parseInt(cartCountElement.innerText) + 1;
+                        }
+            });
+        });
+    </script>
+</body>
+</html>

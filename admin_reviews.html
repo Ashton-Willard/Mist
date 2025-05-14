@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Review Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Admin Review Panel</h1>
+        <button onclick="window.location.href='{{ url_for('store') }}'">Back to Store</button>
+    </header>
+
+    <section>
+        <h2>Pending Reviews</h2>
+        {% for review in reviews %}
+            <div class="review-item">
+                <p><strong>{{ review.user_id}}</strong> rated {{ review.rating }} stars</p>
+                <p>"{{ review.review_text }}"</p>
+               <form method="POST" action="{{ url_for('delete_review', review_id=review.id) }}">
+    <button type="submit">Delete</button>
+</form>
+            </div>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Pending Refund Requests</h2>
+        {% for refund in refund_requests %}
+            <div class="refund-item">
+<p><strong>{{ refund.user_id }}</strong> requested a refund for {{ refund.game.title }}</p>                <p>Reason: "{{ refund.reason }}"</p>
+                <form method="POST" action="{{ url_for('approve_refund', refund_id=refund.id) }}">
+    <button type="submit">Approve</button>
+    </form>
+               <form method="POST" action="{{ url_for('approve_refund', refund_id=refund.id) }}">
+    <button type="submit">Deny</button>
+</form>
+            </div>
+        {% endfor %}
+    </section>
+</body>
+</html>

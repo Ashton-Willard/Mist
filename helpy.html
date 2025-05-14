@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Game List</title>
+    <style>
+        .game-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 15px auto;
+            text-align: center;
+            width: 300px;
+        }
+        .game-box img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+    <section class="placeholder-section">
+        <h2>Game Store</h2>
+        <div class="game-grid">
+            {% for game in games %}
+                <div class="game-card">
+                    <img src="{{ game.image_url }}" alt="{{ game.title }}" class="placeholder-image">
+                    <h3>{{ game.title }}</h3>
+                    <p>${{ "%.2f"|format(game.price) }}</p>
+                    <form method="POST" action="{{ url_for('add_to_cart', game_id=game.id) }}">
+                        {% if game.id in cart_game_ids %}
+                            <button type="button" class="buy-btn" disabled>Already in Cart</button>
+                        {% else %}
+                            <button type="submit" class="buy-btn">Add to Cart</button>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</body>
+</html>

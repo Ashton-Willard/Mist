@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ game.title }} - Mist Game Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1 class="page-title">{{ game.title }}</h1>
+        <nav class="nav-buttons">
+            {% if current_user.is_authenticated and current_user.role in ['Admin', 'Vendor'] %}
+                <button class="nav" onclick="window.location.href='{{ url_for('add_game') }}'">Add Game</button>
+                <button class="nav" onclick="window.location.href='{{ url_for('dashboard') }}'">Manage Games</button>
+            {% endif %}
+            <button class="nav" onclick="window.location.href='{{ url_for('genre_filter') }}'">Filter Genres</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('store') }}'">Store</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('library') }}'">Library</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('points') }}'">Points</button>
+            <input class="nav" type="text" placeholder="Search games..." id="searchBox">
+            <button class="nav" onclick="window.location.href='{{ url_for('wishlist') }}'">Wishlist</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('cart') }}'">
+                🛒 Cart <span id="cart-count" style="background:blue; border-radius:50%; padding:2px 8px; color:white;">{{ cart_item_count }}</span>
+            </button>
+            {% if current_user.is_authenticated %}
+                <div class="user-dropdown">
+                    <span class="username">{{ current_user.username }}</span>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('mist_wallet') }}">Mist Wallet</a>
+                        <a href="{{ url_for('index') }}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <button onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                <button onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="game-detail-container">
+        <img src="{{ url_for('static', filename='images/' + game.image_filename) }}" alt="{{ game.title }}" class="game-detail-image">
+
+        <section class="game-info">
+            <p class="game-description">{{ game.description }}</p>
+            <div class="game-meta">
+                <p><strong>Genres:</strong> {{ game.genres }}</p>
+                <p><strong>Price:</strong> ${{ game.price }}</p>
+            </div>
+
+            <div class="buy-box">
+                <div class="buy-box-left">
+                    <p class="buy-text">Buy {{ game.title }} for ${{ game.price }}</p>
+                </div>
+                <div class="buy-box-right">
+                    <!-- Add to Cart Form -->
+                    <form method="POST" action="{{ url_for('add_to_cart', game_id=game.id) }}">
+                        {% if game.id in cart_game_ids %}
+                            <button type="button" class="buy-btn" disabled>In Cart</button>
+                        {% else %}
+                            <button type="submit" class="buy-btn">Add to Cart</button>
+                        {% endif %}
+                    </form>
+
+                    <!-- Wishlist Form -->
+                    <!-- Wishlist Toggle Button -->
+                    <button id="wishlist-btn"
+                            class="wishlist-toggle"
+                            data-game-id="{{ game.id }}">
+                        {% if game in current_user.wishlist %}
+                            ❤️ Wishlisted
+                        {% else %}
+                            🤍 Add to Wishlist
+                        {% endif %}
+                    </button>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Mist Game Store</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const wishlistBtn = document.getElementById('wishlist-btn');
+
+        if (wishlistBtn) {
+            wishlistBtn.addEventListener('click', function () {
+                const gameId = wishlistBtn.getAttribute('data-game-id');
+
+                fetch(`/wishlist/toggle/${gameId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        // If you're using Flask-WTF CSRF protection, add:
+
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.wishlisted) {
+                        wishlistBtn.innerText = '❤️ Wishlisted';
+                    } else {
+                        wishlistBtn.innerText = '🤍 Add to Wishlist';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling wishlist:', error);
+                });
+            });
+        }
+    });
+    </script>
+
+</body>
+</html>

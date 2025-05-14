@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point Shop - Mist Game Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Point Shop</h1>
+        <nav class="nav-buttons">
+            <button onclick="window.location.href='{{ url_for('store') }}'">Store</button>
+            <button onclick="window.location.href='{{ url_for('library') }}'">Library</button>
+            <input type="text" placeholder="Search games..." id="searchBox">
+            <button onclick="window.location.href='{{ url_for('cart') }}'">
+                🛒 Cart <span id="cart-count" style="background:blue; border-radius:50%; padding:2px 8px; color:white;">{{ cart_item_count }}</span>
+            </button>
+            {% if current_user.is_authenticated %}
+                <div class="user-dropdown">
+                    <span class="username">{{ current_user.username }}</span>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('mist_wallet') }}">Mist Wallet</a>
+                        <a href="{{ url_for('index') }}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <button onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                <button onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
+            {% endif %}
+        </nav>
+
+    </header>
+
+    <section class="featured">
+        <h2>Featured Rewards</h2>
+        <div class="game-grid">
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/eldenring2.jpg') }}" alt="Reward 1">
+                <h3>Special Weapon</h3>
+                <p>500 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 2">
+                <h3>Exclusive</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/persona6.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/bloodborne2.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+             <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/bloodborne2.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/stick.jpg') }}" alt="Reward 3">
+                <h3>Special Weapon</h3>
+                <p>700 points</p>
+                <button class="buy-btn">Redeem</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Mist Game Store</p>
+    </footer>
+</body>
+</html>

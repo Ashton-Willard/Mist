@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Wishlist - Mist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>My Wishlist</h1>
+
+        <nav class="nav-buttons">
+            {% if current_user.is_authenticated and current_user.role in ['Admin', 'Vendor'] %}
+                <button class="nav" onclick="window.location.href='{{ url_for('add_game') }}'">Add Game</button>
+                <button class="nav" onclick="window.location.href='{{ url_for('dashboard') }}'">Manage Games</button>
+            {% endif %}
+            <button class="nav" onclick="window.location.href='{{ url_for('genre_filter') }}'">Filter Genres</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('store') }}'">Store</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('library') }}'">Library</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('points') }}'">Points</button>
+            <input class="nav" type="text" placeholder="Search games..." id="searchBox">
+            <button class="nav" onclick="window.location.href='{{ url_for('wishlist') }}'">Wishlist</button>
+            <button class="nav" onclick="window.location.href='{{ url_for('cart') }}'">
+                🛒 Cart <span id="cart-count" style="background:blue; border-radius:50%; padding:2px 8px; color:white;">{{ cart_item_count }}</span>
+            </button>
+            {% if current_user.is_authenticated %}
+                <div class="user-dropdown">
+                    <span class="username">{{ current_user.username }}</span>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('mist_wallet') }}">Mist Wallet</a>
+                        <a href="{{ url_for('index') }}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <button onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                <button onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
+            {% endif %}
+        </nav>
+
+    <div></div>
+    <div class="game-grid">
+        {% for game in games %}
+            <div class="game-card">
+                <a href="{{ url_for('game_detail', game_id=game.id) }}">
+                    {% if game.image_filename %}
+                        <img src="{{ url_for('static', filename='images/' + game.image_filename) }}" alt="{{ game.title }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default.jpg') }}" alt="{{ game.title }}">
+                    {% endif %}
+                    <h3>{{ game.title }}</h3>
+                    <p>${{ "%.2f"|format(game.price) }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+
+</body>
+</html>

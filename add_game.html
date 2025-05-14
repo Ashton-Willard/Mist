@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f2937;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 20px;
+            color: #374151;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-top: 6px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button[type="submit"] {
+            background-color: #3b82f6;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2563eb;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add New Game</h1>
+    <form method="POST">
+        <label>
+            Title:
+            <input type="text" name="title" required>
+        </label>
+
+        <label>
+            Description:
+            <textarea name="description" required></textarea>
+        </label>
+
+        <label>
+            Price:
+            <input type="number" step="0.01" name="price" required>
+        </label>
+
+        <label>
+            Image URL (optional):
+            <input type="text" name="image_url" placeholder="e.g., https://example.com/game.jpg">
+        </label>
+
+        <label>
+            Local Image Filename (optional):
+            <input type="text" name="image_filename" placeholder="e.g., game.jpg">
+        </label>
+
+        <label>
+            Genres:
+            <textarea name="genres" placeholder="e.g., Action, Adventure" required></textarea>
+        </label>
+
+        <button type="submit">Add Game</button>
+    </form>
+    <a href="{{ url_for('store') }}">← Back to Store</a>
+</body>
+</html>
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Mist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.4.4/phaser.min.js"></script> <!-- PhaserJS -->
+    <script src="{{ url_for('static', filename='mist2.js') }}"></script> <!-- Your mist particles -->
+</head>
+<body>
+    <!-- Mist Container Wrapping Entire Page -->
+    <div class="mist-container">
+        <!-- Centered Checkout Box -->
+        <div class="checkout-box">
+            <header>
+                <h1>Checkout</h1>
+                <nav>
+                    <button onclick="window.location.href='{{ url_for('cart') }}'">Back to Cart</button>
+                    <button onclick="window.location.href='{{ url_for('store') }}'">Continue Shopping</button>
+                </nav>
+            </header>
+
+            <main class="checkout-container">
+                <!-- Order Summary -->
+                <div class="checkout-summary">
+                    <h2>Order Summary</h2>
+                    <div class="order-items">
+                        {% for item in cart %}
+                            <div class="order-item">
+                                <div class="image-wrapper">
+                                {% if item.image_url %}
+                                    <img class="game-images" src="{{ item.image_url }}" alt="{{ item.title }}">
+                                {% elif item.image_filename %}
+                                    <img class="game-images" src="{{ url_for('static', filename='images/' + item.image_filename) }}" alt="{{ item.title }}">
+                                {% else %}
+                                    <img class="game-images" src="{{ url_for('static', filename='images/default.jpg') }}" alt="{{ item.title }}">
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <h3>Total: ${{ "%.2f"|format(total_price) }}</h3>
+                </div>
+
+                <!-- Payment Form -->
+                <form class="checkout-form" method="POST" action="{{ url_for('checkout') }}">
+                    <h2>Payment Information</h2>
+                    <label for="name">Name on Card:</label>
+                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+
+                    <label for="card-number">Card Number:</label>
+                    <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" required>
+
+                    <label for="expiry">Expiry Date:</label>
+                    <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required>
+
+                    <label for="cvv">CVV:</label>
+                    <input type="password" id="cvv" name="cvv" placeholder="123" required>
+
+                    <button type="submit" class="checkout-btn">Complete Purchase</button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <!-- PhaserJS Smoke Effect -->
+    <div id="wrap">
+        <div id="game-wrap"></div>
+    </div>
+</body>
+</html>

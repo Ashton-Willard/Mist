@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Order Confirmation</h1>
+    </header>
+
+    <main>
+        <p>Thank you for your purchase! Your games have been added to your library.</p>
+        <a href="{{ url_for('library') }}" class="btn">Go to Library</a>
+    </main>
+
+    <footer>
+        <p>© 2025 Mist Gaming Store</p>
+    </footer>
+</body>
+</html>
